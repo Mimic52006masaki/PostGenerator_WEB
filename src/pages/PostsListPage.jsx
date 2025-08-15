@@ -15,13 +15,18 @@ export default function PostsListPage() {
             const res = await fetch('http://localhost:3000/api/posts');
             if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
             const data = await res.json();
-            setPosts(data);
+
+            // 作成日(created_at)を古い順にソート
+            const sortedData = [...data].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+            setPosts(sortedData);
         } catch {
             setError('投稿一覧の取得に失敗しました。');
         } finally {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         fetchPosts();
