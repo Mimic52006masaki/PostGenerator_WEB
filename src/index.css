@@ -1,3 +1,4 @@
+/* web/src/index.css */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -24,8 +25,8 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  /* display: flex;  この行を削除またはコメントアウト */
+  /* place-items: center; この行を削除またはコメントアウト */
   min-width: 320px;
   min-height: 100vh;
 }

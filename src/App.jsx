@@ -5,11 +5,13 @@ import PostsListPage from './pages/PostsListPage'
 import PostDetailPage from './pages/PostDetailPage'
 import { Toaster } from 'react-hot-toast';
 import NotFoundPage from './pages/NotFoundPage'
+import Header from './components/Header'
 
 export default function App() {
   return (
     <>
       <Router>
+        <Header />
         <Routes>
           <Route path='/' element={<UrlInputPage />} />
           <Route path='/posts' element={<PostsListPage />} />

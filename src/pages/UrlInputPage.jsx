@@ -65,7 +65,7 @@ export default function UrlInputPage() {
                     placeholder="1行に1つずつURLを入力してください"
                     disabled={loading}
                 />
-                <button className={styles.button} type="submit" disabled={loading}>
+                <button className={styles.submitButton} type="submit" disabled={loading}>
                     {loading ? '送信中...' : '登録'}
                 </button>
             </form>
