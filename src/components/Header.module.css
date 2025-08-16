@@ -10,7 +10,7 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 95%;
     z-index: 1000;
 }
 
@@ -36,11 +36,13 @@
     display: flex;
     gap: 2rem;
     list-style: none;
+    margin-right: 50px;
 
 }
 
 .navLink {
     transition: color 0.2s ease;
+    margin-right: 50px;
 }
 
 .navLink:hover {
