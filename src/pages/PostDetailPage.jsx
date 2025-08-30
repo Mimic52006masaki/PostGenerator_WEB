@@ -24,6 +24,20 @@ export default function PostDetailPage() {
         fetchData();
     }, [id]);
 
+    const handleDelete = async () => {
+        if (!window.confirm("本当に削除しますか？")) return;
+        try {
+            const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
+                method: "DELETE",
+            });
+            if (!res.ok) throw new Error("削除に失敗しました");
+            alert("投稿を削除しました");
+            navigate("/posts");
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
     if (loading) return <p>読込中...</p>;
     if (!post) return <p>投稿が存在しません</p>;
 
@@ -43,7 +57,20 @@ export default function PostDetailPage() {
                 >
                     コピー
                 </button>
-                <button className={styles.backButton} onClick={() => navigate(`/posts`)}>投稿に戻る</button>
+
+                <button
+                    onClick={handleDelete}
+                    className={styles.deleteButton}
+                >
+                    投稿を削除
+                </button>
+
+                <button
+                    className={styles.backButton}
+                    onClick={() => navigate("/posts")}
+                >
+                    投稿に戻る
+                </button>
             </div>
 
             <div className={styles.details}>
