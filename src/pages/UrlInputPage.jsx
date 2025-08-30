@@ -42,8 +42,8 @@ export default function UrlInputPage() {
             if (data.status === 'ok') {
                 setSuccess('スクレイピング登録が成功しました!');
                 setInput('');
-                if (data.post_ids && data.post_ids.length > 0) {
-                    setCreatedPostId(data.post_ids[0]); // 最初の投稿IDを保存
+                if (data.posts && data.posts.length > 0) {
+                    setCreatedPostId(data.posts[0].id); // ← 修正
                 }
             } else {
                 setError('スクレイピングに失敗しました。')
