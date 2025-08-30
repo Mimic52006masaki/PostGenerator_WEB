@@ -47,7 +47,7 @@ export default function PostsListPage() {
                     ))}
                 </ul>
             )}
-            <button onClick={() => navigate('/')}>新規登録</button>
+            <button className={styles.newButton} onClick={() => navigate('/')}>新規登録</button>
         </div>
     );
 }
