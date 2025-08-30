@@ -33,6 +33,13 @@
     margin-bottom: 1.5rem;
 }
 
+.postDate {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+
 .invalidDates {
     text-align: left;
     white-space: pre-wrap;

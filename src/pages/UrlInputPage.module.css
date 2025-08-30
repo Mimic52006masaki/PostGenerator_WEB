@@ -58,6 +58,16 @@
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
 
+.input {
+    width: 20%;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #c5c4c4;
+    font-size: 1rem;
+    color: #333;
+    text-align: center;
+}
+
 /* ===== 送信ボタン ===== */
 .submitButton {
     padding: 12px 24px;

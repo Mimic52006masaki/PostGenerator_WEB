@@ -4,9 +4,10 @@ import styles from "./UrlInputPage.module.css";
 
 export default function UrlInputPage() {
     const [input, setInput] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [date, setDate] = useState('');
     const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState('');
+    const [error, setError] = useState('');
     const [createdPostId, setCreatedPostId] = useState(null);
     const navigate = useNavigate();
 
@@ -16,53 +17,44 @@ export default function UrlInputPage() {
         setSuccess('');
         setCreatedPostId(null);
 
-        const urls = input
-            .split('\n')
-            .map(url => url.trim())
-            .filter(url => url.length > 0);
-
-        if (urls.length === 0) {
-            setError('URLを1つ以上入力してください');
-            return;
-        }
-
-        for (const url of urls) {
-            try { new URL(url) } catch { setError(`無効なURL形式があります: ${url}`); return; }
-        }
+        const urls = input.split('\n').map(u => u.trim()).filter(Boolean);
+        if (!urls.length) return setError('URLを1つ以上入力してください');
 
         setLoading(true);
         try {
-            const res = await fetch('/api/scrape', {
+            const res = await fetch('http://localhost:3000/api/scrape', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ urls })
+                body: JSON.stringify({ urls, date })
             });
             if (!res.ok) throw new Error(`サーバーエラー: ${res.status}`);
             const data = await res.json();
-            if (data.status === 'ok') {
-                setSuccess('スクレイピング登録が成功しました!');
-                setInput('');
-                if (data.posts && data.posts.length > 0) {
-                    setCreatedPostId(data.posts[0].id); // ← 修正
-                }
-            } else {
-                setError('スクレイピングに失敗しました。')
-            }
+            setSuccess('スクレイピング登録が成功しました!');
+            if (data.post_ids.length) setCreatedPostId(data.post_ids[0]);
         } catch {
             setError('通信エラーが発生しました。');
-        } finally { setLoading(false); }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>URL入力画面</h1>
-            <form className={styles.form} onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <input
+                    className={styles.input}
+                    type="date"
+                    value={date}
+                    onChange={e => setDate(e.target.value)}
+                    disabled={loading}
+                />
                 <textarea
                     className={styles.textarea}
                     rows={10}
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    placeholder="1行に1つずつURLを入力してください"
+                    placeholder="1行に1つずつURLを入力"
                     disabled={loading}
                 />
                 <button className={styles.submitButton} type="submit" disabled={loading}>
@@ -74,20 +66,8 @@ export default function UrlInputPage() {
                 <>
                     <p className={styles.success}>{success}</p>
                     <div className={styles.buttonGroup}>
-                        {createdPostId && (
-                            <button
-                                className={styles.button}
-                                onClick={() => navigate(`/posts/${createdPostId}`)}
-                            >
-                                詳細ページへ
-                            </button>
-                        )}
-                        <button
-                            className={`${styles.button} ${styles.listButton}`}
-                            onClick={() => navigate('/posts')}
-                        >
-                            投稿一覧へ
-                        </button>
+                        {createdPostId && <button onClick={() => navigate(`/posts/${createdPostId}`)}>詳細</button>}
+                        <button onClick={() => navigate('/posts')}>一覧へ</button>
                     </div>
                 </>
             )}
