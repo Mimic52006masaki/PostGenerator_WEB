@@ -12,21 +12,16 @@ export default function PostsListPage() {
         setLoading(true);
         setError('');
         try {
-            const res = await fetch('http://localhost:3000/api/posts');
+            const res = await fetch('/api/posts'); // ← API統一
             if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
             const data = await res.json();
-
-            // 作成日(created_at)を古い順にソート
-            const sortedData = [...data].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-            setPosts(sortedData);
+            setPosts(data); // ← ソート処理削除、バックエンド順序に合わせる
         } catch {
             setError('投稿一覧の取得に失敗しました。');
         } finally {
             setLoading(false);
         }
     };
-
 
     useEffect(() => {
         fetchPosts();
