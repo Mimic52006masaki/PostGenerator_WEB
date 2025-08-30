@@ -13,9 +13,7 @@ export default function PostDetailPage() {
     const handleDelete = async () => {
         if (!window.confirm('本当に削除しますか？')) return;
         try {
-            const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
-                method: 'DELETE'
-            });
+            const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
             if (!res.ok) throw new Error(`HTTPエラー: ${res.status}`);
             alert('投稿を削除しました!');
             navigate('/posts');
@@ -24,23 +22,19 @@ export default function PostDetailPage() {
         }
     };
 
-    // Post と detail をまとめて取得
     const fetchData = async () => {
         setLoading(true);
         setError('');
         try {
-            // post の取得
-            const postRes = await fetch(`http://localhost:3000/api/posts/${id}`);
-            if (!postRes.ok) throw new Error(`Post HTTPエラー: ${postRes.status}`);
-            const postData = await postRes.json();
+            const res = await fetch(`/api/posts/${id}`);
+            if (!res.ok) throw new Error(`Post HTTPエラー: ${res.status}`);
+            const postData = await res.json();
             setPost(postData);
 
-            // detail の取得
-            // detail の取得部分
-            const detailRes = await fetch(`http://localhost:3000/api/posts/${id}/details`);
-            if (!detailRes.ok) throw new Error(`Detail HTTPエラー: ${detailRes.status}`);
-            const detailData = await detailRes.json();
-            setDetails(detailData);
+            // details は HTML 部分だけを配列にする
+            const detailHtmlArray = postData.details.map(d => d.content);
+            setDetails(detailHtmlArray);
+
         } catch {
             setError('投稿または詳細情報の取得に失敗しました。');
         } finally {
@@ -52,13 +46,13 @@ export default function PostDetailPage() {
 
     const copyDetails = () => {
         if (details.length > 0) {
-            const text = details.join('\n'); // 文字列の配列をまとめる
+            // 各メッセージの間に空行を入れて読みやすくする
+            const text = details.join('\n\n');
             navigator.clipboard.writeText(text)
                 .then(() => alert('Detail 内容をコピーしました！'))
                 .catch(() => alert('コピーに失敗しました'));
         }
     };
-
 
     if (loading) return <p>読込中...</p>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -77,6 +71,13 @@ export default function PostDetailPage() {
                 <button className={styles.backButton} onClick={() => navigate('/posts')}>
                     投稿一覧に戻る
                 </button>
+            </div>
+
+            {/* 投稿内容をHTMLとして表示 */}
+            <div className={styles.detailsContainer}>
+                {details.map((content, idx) => (
+                    <div key={idx} dangerouslySetInnerHTML={{ __html: content }} />
+                ))}
             </div>
         </div>
     );
