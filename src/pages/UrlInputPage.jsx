@@ -27,16 +27,35 @@ export default function UrlInputPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ urls, date })
             });
-            if (!res.ok) throw new Error(`サーバーエラー: ${res.status}`);
+
             const data = await res.json();
+
+            // HTTPステータスが 2xx 以外ならエラー
+            if (!res.ok) {
+                setError(`サーバーエラー: ${res.status}`);
+                return;
+            }
+
+            // 個別URLのエラーがある場合
+            if (data.errors && data.errors.length > 0) {
+                setError(`一部URLでエラーが発生しました: ${data.errors.map(e => e.url).join(', ')}`);
+                return;
+            }
+
+            // 成功メッセージ
             setSuccess('スクレイピング登録が成功しました!');
-            if (data.post_ids.length) setCreatedPostId(data.post_ids[0]);
-        } catch {
-            setError('通信エラーが発生しました。');
+            if (data.post_ids && data.post_ids.length) {
+                setCreatedPostId(data.post_ids[0]);
+            }
+
+        } catch (err) {
+            console.error(err);
+            setError(`通信エラーが発生しました: ${err.message}`);
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <div className={styles.container}>
