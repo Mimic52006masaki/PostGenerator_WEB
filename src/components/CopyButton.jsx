@@ -23,11 +23,11 @@ export default function CopyButton({ label, content }) {
             <button
                 onClick={handleCopy}
                 style={{
-                    padding: "5px 12px",
+                    padding: "15px 25px",
                     backgroundColor: copied ? "green" : "#007bff",
                     color: "#fff",
                     border: "none",
-                    borderRadius: "4px",
+                    borderRadius: "8px",
                     cursor: "pointer",
                     fontWeight: "bold",
                     fontSize: "14px",
@@ -35,7 +35,7 @@ export default function CopyButton({ label, content }) {
                     margin: "5px"
                 }}
             >
-                [{label}]
+                {label}
             </button>
         </div>
     )
