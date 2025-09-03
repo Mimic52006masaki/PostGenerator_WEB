@@ -61,23 +61,28 @@ export default function PostDetailPage() {
     const timeKey = `${hour}:00`;
     const [code1, code2] = TIME_CODES[timeKey] || [];
 
+    // code1, code2 がオブジェクトの場合は空文字列にする
+    const safeCode1 = typeof code1 === 'string' ? code1 : '';
+    const safeCode2 = typeof code2 === 'string' ? code2 : '';
+
     return (
         <div className={styles.container}>
             <h1>{post.title}</h1>
             <p>{post.published_at}</p>
 
-            {/* タイトル下に時間帯ボタン */}
-            {(code1 || code2) && (
+            {(safeCode1 || safeCode2) && (
                 <div className={styles.buttonGroup} style={{ marginBottom: "20px" }}>
-                    {code1 && <CopyButton label={`${timeKey}_1`} content={[code1]} />}
-                    {code2 && <CopyButton label={`${timeKey}_2`} content={[code2]} />}
+                    {safeCode1 && <CopyButton label={`${timeKey}_1`} content={[safeCode1]} />}
+                    {safeCode2 && <CopyButton label={`${timeKey}_2`} content={[safeCode2]} />}
                 </div>
             )}
 
             <div className={styles.buttonGroup}>
                 <button
                     onClick={() => {
-                        const textToCopy = post.details.map(d => d.content).join("\n\n");
+                        const textToCopy = post.details
+                            .map(d => typeof d.content === 'string' ? d.content : '')
+                            .join("\n\n");
                         navigator.clipboard.writeText(textToCopy);
                         alert("投稿内容をコピーしました");
                     }}
@@ -97,7 +102,7 @@ export default function PostDetailPage() {
 
             <div className={styles.details}>
                 {post.details.map(d => (
-                    <div key={d.id} dangerouslySetInnerHTML={{ __html: d.content }} />
+                    <div key={d.id} dangerouslySetInnerHTML={{ __html: typeof d.content === 'string' ? d.content : '' }} />
                 ))}
             </div>
         </div>
