@@ -2,23 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./PostDetailPage.module.css";
 import CopyButton from "../components/CopyButton";
-import { TIME_CODES } from "../utils/timeCodes";
-
-import {
-    t7_1, t7_2, t8_1, t8_2, t9_1, t9_2,
-    t10_1, t10_2, t11_1, t11_2, t12_1, t12_2,
-    t13_1, t13_2, t14_1, t14_2, t15_1, t15_2,
-    t16_1, t16_2, t17_1, t17_2, t18_1, t18_2,
-    t19_1, t19_2, t20_1, t20_2, t21_1, t21_2
-} from "../components/code";
-
-const TIME_CODES = {
-    "7:00": [t7_1, t7_2], "8:00": [t8_1, t8_2], "9:00": [t9_1, t9_2],
-    "10:00": [t10_1, t10_2], "11:00": [t11_1, t11_2], "12:00": [t12_1, t12_2],
-    "13:00": [t13_1, t13_2], "14:00": [t14_1, t14_2], "15:00": [t15_1, t15_2],
-    "16:00": [t16_1, t16_2], "17:00": [t17_1, t17_2], "18:00": [t18_1, t18_2],
-    "19:00": [t19_1, t19_2], "20:00": [t20_1, t20_2], "21:00": [t21_1, t21_2],
-};
+import { TIME_CODES } from "./timeCodes";
 
 // 環境変数から API URL を取得（.env.development を参照）
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000/api";
