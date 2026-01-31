@@ -1,17 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import styles from "./NotFoundPage.module.css";
 
 export default function NotFoundPage() {
     const navigate = useNavigate();
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>404 - ページが見つかりません</h1>
-            <p className={styles.message}>
+        <div className="text-center mt-20 p-4 bg-white bg-opacity-90 rounded-lg shadow-lg max-w-md mx-auto">
+            <h1 className="text-2xl text-red-600 mb-4">404 - ページが見つかりません</h1>
+            <p className="text-lg text-gray-700 mb-8">
                 URLが間違っているか、ページは存在しません。
             </p>
             <button
-                className={styles.backButton}
+                className="py-2 px-6 text-lg border-none rounded bg-blue-500 text-white cursor-pointer transition-colors hover:bg-blue-700"
                 onClick={() => navigate('/')}
             >
                 トップに戻る

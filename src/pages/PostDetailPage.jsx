@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import styles from "./PostDetailPage.module.css";
 import CopyButton from "../components/CopyButton";
 import { TIME_CODES } from "./timeCodes";
 
@@ -13,6 +12,7 @@ export default function PostDetailPage() {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +43,7 @@ export default function PostDetailPage() {
         }
     };
 
-    if (error) return <p className={styles.error}>エラー: {error}</p>;
+    if (error) return <p className="text-red-600">エラー: {error}</p>;
     if (loading) return <p>読込中...</p>;
     if (!post) return <p>投稿が存在しません</p>;
 
@@ -55,41 +55,42 @@ export default function PostDetailPage() {
     const safeCode2 = typeof code2 === "string" ? code2 : "";
 
     return (
-        <div className={styles.container}>
-            <h1>{post.title}</h1>
-            <p>{post.published_at}</p>
+        <div className="max-w-3xl mx-auto mt-12 p-7 font-sans bg-white bg-opacity-90 rounded-2xl shadow-2xl">
+            <h1 className="text-2xl mb-6">{post.title}</h1>
+            <p className="mb-4">{post.published_at}</p>
+
 
             {(safeCode1 || safeCode2) && (
-                <div className={styles.buttonGroup} style={{ marginBottom: "20px" }}>
+                <div className="flex gap-2 mb-6 ml-4 justify-start">
                     {safeCode1 && <CopyButton label={`${timeKey}_1`} content={[safeCode1]} />}
                     {safeCode2 && <CopyButton label={`${timeKey}_2`} content={[safeCode2]} />}
                 </div>
             )}
-
-            <div className={styles.buttonGroup}>
+            <div className="flex gap-4 m-4">
                 <button
                     onClick={() => {
                         const textToCopy = (post.details || [])
                             .map(d => (typeof d.content === "string" ? d.content : ""))
                             .join("\n\n");
                         navigator.clipboard.writeText(textToCopy);
-                        alert("投稿内容をコピーしました");
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
                     }}
-                    className={styles.copyButton}
+                    className={`flex-1 py-3 px-5 shadow-xl ${copied ? 'bg-blue-500' : 'bg-green-500'} text-white text-bold border-2 border-gray-600 rounded-lg cursor-pointer font-medium transition-all hover:${copied ? 'bg-blue-600' : 'bg-green-600'} hover:-translate-y-0.5`}
                 >
                     投稿全体コピー
                 </button>
 
-                <button onClick={handleDelete} className={styles.deleteButton}>
+                <button onClick={handleDelete} className="flex-1 py-3 px-5 bg-red-500 text-white border-2 border-white rounded-lg cursor-pointer font-medium transition-all hover:bg-red-600 hover:-translate-y-0.5">
                     投稿を削除
                 </button>
 
-                <button className={styles.backButton} onClick={() => navigate("/posts")}>
+                <button className="flex-1 py-3 px-5 bg-blue-500 text-white border-2 border-white rounded-lg cursor-pointer font-medium transition-all hover:bg-blue-600 hover:-translate-y-0.5" onClick={() => navigate("/posts")}>
                     投稿に戻る
                 </button>
             </div>
 
-            <div className={styles.details}>
+            <div>
                 {(post.details || []).map(d => (
                     <div
                         key={d.id}

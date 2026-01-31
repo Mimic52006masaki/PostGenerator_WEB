@@ -22,21 +22,11 @@ export default function CopyButton({ label, content }) {
         <div>
             <button
                 onClick={handleCopy}
-                style={{
-                    padding: "15px 25px",
-                    backgroundColor: copied ? "green" : "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                    fontSize: "14px",
-                    boxSizing: "border-box",
-                    margin: "5px"
-                }}
+                className={`py-3 px-6 ${copied ? 'bg-green-500' : 'bg-blue-500'} hover:${copied ? 'bg-green-600' : 'bg-blue-600'} text-white border-2 border-gray-500 rounded-lg cursor-pointer font-semibold text-sm transition-all duration-200 shadow-xl hover:shadow-lg hover:-translate-y-0.5`}
             >
                 {label}
             </button>
         </div>
     )
 }
+
